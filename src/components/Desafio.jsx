@@ -31,19 +31,18 @@ const Desafio = () => {
 	};
 
 	const buscadorChangeHandler = (event) => {
+		setListadoColaboradores(colaboradores);
 		setNombreBuscado(event.target.value);
 	};
 
 	const buscadorSubmitHandler = (event) => {
 		event.preventDefault();
-		setListadoColaboradores(colaboradores);
 
 		if (nombreBuscado.trim().length === 0) return;
 
 		const filtradoLista = listadoColaboradores.filter((e) => e.nombre === nombreBuscado);
 
 		if (filtradoLista.length === 0) {
-			setNombreBuscado('');
 			return alert(`No existe el colaborador ${nombreBuscado}`);
 		}
 
