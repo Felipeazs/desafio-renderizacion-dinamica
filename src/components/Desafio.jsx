@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
+
 import colaboradores from '../models/colaboradores';
+import { Stack } from '@mui/system';
 
 const Desafio = () => {
 	const [nombre, setNombre] = useState('');
@@ -31,14 +36,19 @@ const Desafio = () => {
 		setCorreo('');
 	};
 
-	const buscadorChangeHandler = (event) => {
-		setNombreBuscado(event.target.value);
+	const buscadorChangeHandler = (event, newValue) => {
+		if (!newValue) {
+			setNombreBuscado(event.target.value);
+		} else {
+			setNombreBuscado(newValue);
+		}
 	};
 
 	const buscadorSubmitHandler = (event) => {
 		event.preventDefault();
 
-		if (nombreBuscado.trim().length === 0) return;
+		if (nombreBuscado.trim().length === 0)
+			return alert('Debe ingresar el nombre del colaborador');
 
 		const filtradoLista = colaboradores.filter((e) => e.nombre === nombreBuscado);
 
@@ -60,30 +70,67 @@ const Desafio = () => {
 
 	return (
 		<div>
-			<form onSubmit={buscadorSubmitHandler}>
-				<input
-					type='text'
-					placeholder='buscador'
-					onChange={buscadorChangeHandler}
+			<Stack
+				component='form'
+				sx={{
+					'& > :not(style)': { m: 1, width: '25ch' },
+				}}
+				noValidate
+				autoComplete='off'
+				onSubmit={buscadorSubmitHandler}
+			>
+				<Autocomplete
+					freeSolo
+					disableClearable
 					value={nombreBuscado}
+					onChange={buscadorChangeHandler}
+					options={listadoColaboradores.map((el) => el.nombre)}
+					renderInput={(params) => (
+						<div>
+							<TextField
+								{...params}
+								label='Buscador'
+								onChange={buscadorChangeHandler}
+							/>
+							<Button
+								variant='contained'
+								type='submit'
+							>
+								BUSCAR
+							</Button>
+						</div>
+					)}
 				/>
-				<button type='submit'>Buscar</button>
-			</form>
-			<form onSubmit={submitAgregarHandler}>
-				<input
-					type='text'
-					placeholder='nombre'
+			</Stack>
+
+			<Stack
+				component='form'
+				sx={{
+					'& > :not(style)': { m: 1, width: '25ch' },
+				}}
+				noValidate
+				autoComplete='off'
+				onSubmit={submitAgregarHandler}
+			>
+				<TextField
+					id='outlined-name'
+					label='Nombre'
 					value={nombre}
 					onChange={nombreChangeHandler}
 				/>
-				<input
-					type='text'
-					placeholder='correo'
+				<TextField
+					id='outlined-uncontrolled'
+					label='Correo'
 					value={correo}
 					onChange={correoChangeHandler}
 				/>
-				<button type='submit'>AGREGAR</button>
-			</form>
+				<Button
+					variant='contained'
+					type='submit'
+				>
+					AGREGAR
+				</Button>
+			</Stack>
 			<table>
 				<thead>
 					<tr>
