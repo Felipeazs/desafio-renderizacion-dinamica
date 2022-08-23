@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 
 import colaboradores from '../models/colaboradores';
-import { Stack } from '@mui/system';
+import { Stack, Box } from '@mui/system';
 
 const Desafio = () => {
 	const [nombre, setNombre] = useState('');
@@ -61,86 +68,107 @@ const Desafio = () => {
 
 	const listado = listadoColaboradores.map((colaborador) => {
 		return (
-			<tr key={colaborador.id}>
-				<td>{colaborador.nombre}</td>
-				<td>{colaborador.correo}</td>
-			</tr>
+			<TableRow
+				key={colaborador.id}
+				sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+			>
+				<TableCell>{colaborador.nombre}</TableCell>
+				<TableCell>{colaborador.correo}</TableCell>
+			</TableRow>
 		);
 	});
 
 	return (
-		<div>
+		<Box
+			className='horizontal'
+			sx={{
+				m: 16,
+			}}
+		>
 			<Stack
-				component='form'
 				sx={{
-					'& > :not(style)': { m: 1, width: '25ch' },
+					m: 6,
 				}}
-				noValidate
-				autoComplete='off'
-				onSubmit={buscadorSubmitHandler}
 			>
-				<Autocomplete
-					freeSolo
-					disableClearable
-					value={nombreBuscado}
-					onChange={buscadorChangeHandler}
-					options={listadoColaboradores.map((el) => el.nombre)}
-					renderInput={(params) => (
-						<div>
-							<TextField
-								{...params}
-								label='Buscador'
-								onChange={buscadorChangeHandler}
-							/>
-							<Button
-								variant='contained'
-								type='submit'
-							>
-								BUSCAR
-							</Button>
-						</div>
-					)}
-				/>
-			</Stack>
-
-			<Stack
-				component='form'
-				sx={{
-					'& > :not(style)': { m: 1, width: '25ch' },
-				}}
-				noValidate
-				autoComplete='off'
-				onSubmit={submitAgregarHandler}
-			>
-				<TextField
-					id='outlined-name'
-					label='Nombre'
-					value={nombre}
-					onChange={nombreChangeHandler}
-				/>
-				<TextField
-					id='outlined-uncontrolled'
-					label='Correo'
-					value={correo}
-					onChange={correoChangeHandler}
-				/>
-				<Button
-					variant='contained'
-					type='submit'
+				<Stack
+					component='form'
+					noValidate
+					autoComplete='off'
+					onSubmit={buscadorSubmitHandler}
 				>
-					AGREGAR
-				</Button>
+					<Autocomplete
+						freeSolo
+						disableClearable
+						value={nombreBuscado}
+						onChange={buscadorChangeHandler}
+						options={listadoColaboradores.map((el) => el.nombre)}
+						renderInput={(params) => (
+							<Stack
+								sx={{
+									'& > :not(style)': { m: 1 },
+									width: '35ch',
+								}}
+							>
+								<TextField
+									{...params}
+									label='Buscar nombre de colaborador'
+									onChange={buscadorChangeHandler}
+								/>
+								<Button
+									variant='contained'
+									type='submit'
+								>
+									BUSCAR
+								</Button>
+							</Stack>
+						)}
+					/>
+				</Stack>
+				<Stack
+					component='form'
+					sx={{
+						'& > :not(style)': { m: 1 },
+						width: '35ch',
+					}}
+					noValidate
+					autoComplete='off'
+					onSubmit={submitAgregarHandler}
+				>
+					<TextField
+						id='nombre'
+						label='Nombre'
+						value={nombre}
+						onChange={nombreChangeHandler}
+					/>
+					<TextField
+						id='nombre'
+						label='Correo'
+						value={correo}
+						onChange={correoChangeHandler}
+					/>
+					<Button
+						variant='contained'
+						type='submit'
+					>
+						AGREGAR COLABORADOR
+					</Button>
+				</Stack>
 			</Stack>
-			<table>
-				<thead>
-					<tr>
-						<th>Nombre</th>
-						<th>correo</th>
-					</tr>
-				</thead>
-				<tbody>{listado}</tbody>
-			</table>
-		</div>
+			<TableContainer
+				component={Paper}
+				sx={{ width: 650 }}
+			>
+				<Table aria-label='simple table'>
+					<TableHead>
+						<TableRow>
+							<TableCell>Nombre</TableCell>
+							<TableCell>Correo</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>{listado}</TableBody>
+				</Table>
+			</TableContainer>
+		</Box>
 	);
 };
 
