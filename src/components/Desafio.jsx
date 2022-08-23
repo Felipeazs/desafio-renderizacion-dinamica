@@ -15,7 +15,7 @@ const Desafio = () => {
 		setCorreo(event.target.value);
 	};
 
-	const submitHandler = (event) => {
+	const submitAgregarHandler = (event) => {
 		event.preventDefault();
 
 		const colaborador = {
@@ -24,14 +24,14 @@ const Desafio = () => {
 			correo,
 		};
 
-		setListadoColaboradores((prevState) => [...prevState, colaborador]);
+		colaboradores.push(colaborador);
+		setListadoColaboradores(colaboradores);
 
 		setNombre('');
 		setCorreo('');
 	};
 
 	const buscadorChangeHandler = (event) => {
-		setListadoColaboradores(colaboradores);
 		setNombreBuscado(event.target.value);
 	};
 
@@ -40,7 +40,7 @@ const Desafio = () => {
 
 		if (nombreBuscado.trim().length === 0) return;
 
-		const filtradoLista = listadoColaboradores.filter((e) => e.nombre === nombreBuscado);
+		const filtradoLista = colaboradores.filter((e) => e.nombre === nombreBuscado);
 
 		if (filtradoLista.length === 0) {
 			return alert(`No existe el colaborador ${nombreBuscado}`);
@@ -69,7 +69,7 @@ const Desafio = () => {
 				/>
 				<button type='submit'>Buscar</button>
 			</form>
-			<form onSubmit={submitHandler}>
+			<form onSubmit={submitAgregarHandler}>
 				<input
 					type='text'
 					placeholder='nombre'
