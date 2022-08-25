@@ -20,6 +20,7 @@ const Desafio = () => {
 	const [listadoColaboradores, setListadoColaboradores] = useState(colaboradores);
 	const [nombreBuscado, setNombreBuscado] = useState('');
 	const [error, setError] = useState(false);
+	const [mensaje, setMensaje] = useState('');
 
 	const nombreChangeHandler = (event) => {
 		setNombre(event.target.value);
@@ -54,15 +55,18 @@ const Desafio = () => {
 
 	const buscadorSubmitHandler = (event) => {
 		event.preventDefault();
+		setError(false);
 
-		if (nombreBuscado.trim().length === 0)
-			return alert('Debe ingresar el nombre del colaborador');
+		if (nombreBuscado.trim().length === 0) {
+			setError(true);
+			return setMensaje('Debe ingresar el nombre del colaborador');
+		}
 
 		const filtradoLista = colaboradores.filter((e) => e.nombre === nombreBuscado);
 
 		if (filtradoLista.length === 0) {
 			setError(true);
-			return;
+			return setMensaje('El colaborador buscado no existe');
 		}
 
 		setListadoColaboradores(filtradoLista);
@@ -103,7 +107,7 @@ const Desafio = () => {
 						disableClearable
 						value={nombreBuscado}
 						onChange={buscadorChangeHandler}
-						options={listadoColaboradores.map((el) => el.nombre)}
+						options={colaboradores.map((el) => el.nombre)}
 						renderInput={(params) => (
 							<Stack
 								sx={{
@@ -127,7 +131,7 @@ const Desafio = () => {
 					/>
 				</Stack>
 
-				{error && <p className='errorText'>No existe el colaborador buscado</p>}
+				{error && <p className='errorText'>{mensaje}</p>}
 
 				<Stack
 					component='form'
