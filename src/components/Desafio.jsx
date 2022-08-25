@@ -46,6 +46,7 @@ const Desafio = () => {
 	};
 
 	const buscadorChangeHandler = (event, newValue) => {
+		setError(false);
 		if (!newValue) {
 			setNombreBuscado(event.target.value);
 		} else {
@@ -55,18 +56,19 @@ const Desafio = () => {
 
 	const buscadorSubmitHandler = (event) => {
 		event.preventDefault();
-		setError(false);
 
 		if (nombreBuscado.trim().length === 0) {
 			setError(true);
-			return setMensaje('Debe ingresar el nombre del colaborador');
+			setMensaje('Debe ingresar el nombre del colaborador');
+			return;
 		}
 
 		const filtradoLista = colaboradores.filter((e) => e.nombre === nombreBuscado);
 
 		if (filtradoLista.length === 0) {
 			setError(true);
-			return setMensaje('El colaborador buscado no existe');
+			setMensaje('El colaborador buscado no existe');
+			return;
 		}
 
 		setListadoColaboradores(filtradoLista);
