@@ -6,7 +6,6 @@ import Desafio from './components/Desafio';
 function App() {
 	return (
 		<div className='App'>
-			{/* <Ejercicio1 /> */}
 			<Desafio />
 		</div>
 	);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { Stack, Box } from '@mui/system';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,13 +13,13 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 
 import colaboradores from '../models/colaboradores';
-import { Stack, Box } from '@mui/system';
 
 const Desafio = () => {
 	const [nombre, setNombre] = useState('');
 	const [correo, setCorreo] = useState('');
 	const [listadoColaboradores, setListadoColaboradores] = useState(colaboradores);
 	const [nombreBuscado, setNombreBuscado] = useState('');
+	const [error, setError] = useState(false);
 
 	const nombreChangeHandler = (event) => {
 		setNombre(event.target.value);
@@ -60,7 +61,8 @@ const Desafio = () => {
 		const filtradoLista = colaboradores.filter((e) => e.nombre === nombreBuscado);
 
 		if (filtradoLista.length === 0) {
-			return alert(`No existe el colaborador ${nombreBuscado}`);
+			setError(true);
+			return;
 		}
 
 		setListadoColaboradores(filtradoLista);
@@ -124,6 +126,9 @@ const Desafio = () => {
 						)}
 					/>
 				</Stack>
+
+				{error && <p className='errorText'>No existe el colaborador buscado</p>}
+
 				<Stack
 					component='form'
 					sx={{
@@ -154,6 +159,7 @@ const Desafio = () => {
 					</Button>
 				</Stack>
 			</Stack>
+
 			<TableContainer
 				component={Paper}
 				sx={{ width: 650 }}
