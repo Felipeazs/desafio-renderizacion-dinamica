@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 
 import { Stack, Box } from '@mui/system';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import Button from '@mui/material/Button';
+
+import Tabla from './Tabla';
+import Buscador from './Buscador';
+import NuevoColaborador from './NuevoColaborador';
 
 import colaboradores from '../models/colaboradores';
 
@@ -74,18 +68,6 @@ const Desafio = () => {
 		setListadoColaboradores(filtradoLista);
 	};
 
-	const listado = listadoColaboradores.map((colaborador) => {
-		return (
-			<TableRow
-				key={colaborador.id}
-				sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-			>
-				<TableCell>{colaborador.nombre}</TableCell>
-				<TableCell>{colaborador.correo}</TableCell>
-			</TableRow>
-		);
-	});
-
 	return (
 		<Box
 			className='horizontal'
@@ -98,88 +80,22 @@ const Desafio = () => {
 					m: 6,
 				}}
 			>
-				<Stack
-					component='form'
-					noValidate
-					autoComplete='off'
+				<Buscador
 					onSubmit={buscadorSubmitHandler}
-				>
-					<Autocomplete
-						freeSolo
-						disableClearable
-						value={nombreBuscado}
-						onChange={buscadorChangeHandler}
-						options={colaboradores.map((el) => el.nombre)}
-						renderInput={(params) => (
-							<Stack
-								sx={{
-									'& > :not(style)': { m: 1 },
-									width: '35ch',
-								}}
-							>
-								<TextField
-									{...params}
-									label='Buscar nombre de colaborador'
-									onChange={buscadorChangeHandler}
-								/>
-								<Button
-									variant='contained'
-									type='submit'
-								>
-									BUSCAR
-								</Button>
-							</Stack>
-						)}
-					/>
-				</Stack>
-
+					value={nombreBuscado}
+					onChange={buscadorChangeHandler}
+					colaboradores={colaboradores}
+				/>
 				{error && <p className='errorText'>{mensaje}</p>}
-
-				<Stack
-					component='form'
-					sx={{
-						'& > :not(style)': { m: 1 },
-						width: '35ch',
-					}}
-					noValidate
-					autoComplete='off'
+				<NuevoColaborador
 					onSubmit={submitAgregarHandler}
-				>
-					<TextField
-						id='nombre'
-						label='Nombre'
-						value={nombre}
-						onChange={nombreChangeHandler}
-					/>
-					<TextField
-						id='nombre'
-						label='Correo'
-						value={correo}
-						onChange={correoChangeHandler}
-					/>
-					<Button
-						variant='contained'
-						type='submit'
-					>
-						AGREGAR COLABORADOR
-					</Button>
-				</Stack>
+					nombre={nombre}
+					nombreChangeHandler={nombreChangeHandler}
+					correo={correo}
+					correoChangeHandler={correoChangeHandler}
+				/>
 			</Stack>
-
-			<TableContainer
-				component={Paper}
-				sx={{ width: 650 }}
-			>
-				<Table aria-label='simple table'>
-					<TableHead>
-						<TableRow>
-							<TableCell>Nombre</TableCell>
-							<TableCell>Correo</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>{listado}</TableBody>
-				</Table>
-			</TableContainer>
+			<Tabla listadoColaboradores={listadoColaboradores} />
 		</Box>
 	);
 };
